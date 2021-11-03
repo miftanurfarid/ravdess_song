@@ -26,21 +26,25 @@ y = y.astype(int)
 # split into train and test
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
+# kapan untuk berhenti ??
 earlystop = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                              patience=10,
                                              restore_best_weights=True)
+
+# untuk menyimpan modelnya
 checkpointer = tf.keras.callbacks.ModelCheckpoint(
     filepath='/tmp/weights.hdf5', verbose=1, save_best_only=True)
 
 
 # function to define model
+# menggunakan lstm dengan 3 layer
 def model_lstm():
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.BatchNormalization(axis=-1,
               input_shape=(x_train.shape[1], x_train.shape[2])))
-    model.add(tf.keras.layers.LSTM(32, return_sequences=True))
-    # model.add(tf.keras.layers.LSTM(256, return_sequences=True))
-    # model.add(tf.keras.layers.LSTM(256, return_sequences=True))
+    model.add(tf.keras.layers.LSTM(256, return_sequences=True))
+    model.add(tf.keras.layers.LSTM(256, return_sequences=True))
+    model.add(tf.keras.layers.LSTM(256, return_sequences=True))
     model.add(tf.keras.layers.Flatten())
     model.add(tf.keras.layers.Dropout(0.4))
     model.add(tf.keras.layers.Dense(6, activation='softmax'))
@@ -62,8 +66,8 @@ hist = model.fit(x_train,
                  epochs=100, 
                  shuffle=True,
                 #  callbacks=earlystop,
-                 validation_split=0.1,
-                 batch_size=16)
+                 validation_split=0.1, # 10% utk validasi dari datatrain
+                 batch_size=16) # setiap training ada 16 data yg digunakan
 evaluate = model.evaluate(x_test, y_test, batch_size=16)
 print(evaluate)
 
