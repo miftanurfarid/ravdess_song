@@ -65,34 +65,34 @@ evaluate = model.evaluate(X_test, y_test, batch_size=16)
 print(evaluate)
 
 # make prediction for confusion_matrix
-# import os
-# from sklearn.metrics import confusion_matrix
-# import seaborn as sns
-# predict = model.predict(test_x, batch_size=16)
-# emotions=['neutral', 'calm', 'happy', 'sad', 'angry', 'fearful', 'disgust', 'surprised']
+import os
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+predict = model.predict(x_test, batch_size=16)
+emotions=['neutral', 'calm', 'happy', 'sad', 'angry', 'fearful', 'disgust', 'surprised']
 
-# # predicted emotions from the test set
-# y_pred = np.argmax(predict, 1)
-# predicted_emo = []
-# for i in range(0,test_y.shape[0]):
-#     emo = emotions[y_pred[i]]
-#     predicted_emo.append(emo)
+# predicted emotions from the test set
+y_pred = np.argmax(predict, 1)
+predicted_emo = []
+for i in range(0,y_test.shape[0]):
+    emo = emotions[y_pred[i]]
+    predicted_emo.append(emo)
 
-# # get actual emotion
-# actual_emo = []
-# y_true = np.argmax(test_y, 1)
-# for i in range(0,test_y.shape[0]):
-#     emo = emotions[y_true[i]]
-#     actual_emo.append(emo)
+# get actual emotion
+actual_emo = []
+y_true = np.argmax(y_test, 1)
+for i in range(0,y_test.shape[0]):
+    emo = emotions[y_true[i]]
+    actual_emo.append(emo)
 
-# # generate the confusion matrix
-# cm = confusion_matrix(actual_emo, predicted_emo)
-# cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+# generate the confusion matrix
+cm = confusion_matrix(actual_emo, predicted_emo)
+cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
-# #index = ['angry', 'calm', 'disgust', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
-# #columns = ['angry', 'calm', 'disgust', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
-# #cm_df = pd.DataFrame(cm, index, columns)
-# #plt.figure(figsize=(10, 6))
-# #sns.heatmap(cm_df, annot=True)
-# #plt.savefig('speech_librosa_hfs.svg')
-# print("UAR: ", cm.trace()/cm.shape[0])
+index = ['angry', 'calm', 'disgust', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
+columns = ['angry', 'calm', 'disgust', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
+cm_df = pd.DataFrame(cm, index, columns)
+plt.figure(figsize=(10, 6))
+sns.heatmap(cm_df, annot=True)
+plt.savefig('speech_librosa_hfs.svg')
+print("UAR: ", cm.trace()/cm.shape[0])
